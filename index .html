@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Guide on How Not to Starve for Fifi</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.1/turn.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        body {
+            background-color: #f4ece2; 
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        #flipbook {
+            width: 90vw;
+            max-width: 850px;
+            height: 75vh;
+            max-height: 650px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .page {
+            background-color: white;
+            padding: 20px 25px;
+            box-sizing: border-box;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- COVER PAGE --- */
+        .cover {
+            background-image: url('https://i.ibb.co/TDp40BY7.jpg'); 
+            background-size: cover;
+            background-position: center;
+            color: #333;
+            position: relative;
+            justify-content: center;
+            align-items: center;
+        }
+        .cover-text {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 80%;
+        }
+        .cover-text h1 { font-size: 2.5em; margin: 10px 0; font-family: 'Georgia', serif; }
+        .cover-text h2 { font-size: 1.2em; color: #555; font-weight: normal; }
+
+        /* --- RECIPE LAYOUT (Magazine Style) --- */
+        .category { color: #a0522d; font-weight: bold; font-size: 0.9em; text-transform: uppercase; border-bottom: 2px solid #eee; padding-bottom: 5px; margin-bottom: 10px; }
+        .recipe-title { font-size: 1.6em; font-weight: bold; margin: 0 0 10px 0; font-family: 'Georgia', serif; }
+
+        /* Top section: Image + Description + Time */
+        .top-layout {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .food-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            max-height: 180px;
+        }
+        .desc-box { font-size: 0.85em; line-height: 1.4; color: #444; }
+        .time-box {
+            background: #f9f9f9;
+            border-left: 4px solid #a0522d;
+            padding: 8px 12px;
+            margin-top: 8px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .time-box span { display: block; font-weight: normal; color: #666; font-size: 0.9em; }
+
+        /* Ingredients: 2 Columns */
+        .section-header { font-weight: bold; color: #333; margin: 8px 0 5px 0; font-size: 1em; border-bottom: 1px solid #eee; padding-bottom: 3px; }
+        .ingredients-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px 15px;
+            font-size: 0.8em;
+            margin: 0 0 8px 0;
+            padding-left: 15px;
+        }
+        .ingredients-grid li { margin-bottom: 2px; }
+
+        /* Instructions */
+        .instructions-box { font-size: 0.8em; line-height: 1.4; }
+        .instructions-box strong { color: #a0522d; display: block; margin-top: 5px; }
+        .instructions-box ul { padding-left: 20px; margin: 3px 0 5px 0; }
+
+        /* Disclaimer */
+        .disclaimer { background: #fff3cd; border-left: 4px solid #ffc107; padding: 4px 8px; margin: 5px 0; font-style: italic; font-size: 0.9em; }
+
+        /* Audio */
+        #audio-controls {
+            margin-top: 20px;
+            padding: 10px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+        audio { width: 100%; }
+
+        @media (max-width: 600px) {
+            #flipbook { width: 95vw; height: 65vh; }
+            .page { padding: 10px 15px; }
+            .top-layout { grid-template-columns: 1fr; } /* Stack image on top for phones */
+            .food-img { max-height: 120px; }
+            .ingredients-grid { grid-template-columns: 1fr; } /* 1 column for ingredients on phones */
+            .cover-text h1 { font-size: 1.8em; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="flipbook">
+        
+        <!-- ====== PAGE 1: COVER ====== -->
+        <div class="page cover">
+            <div class="cover-text">
+                <h2>BY JB, WITH LOVE (& BUTTER)</h2>
+                <h1>A GUIDE ON:<br>HOW NOT TO<br>STARVE TO<br>DEATH FOR<br>FIFI</h1>
+            </div>
+        </div>
+
+        <!-- ====== PAGE 2: DESI OMELETTE ====== -->
+        <div class="page">
+            <div class="category">Breakfast</div>
+            <div class="recipe-title">Desi Omelette</div>
+            <div class="top-layout">
+                <img class="food-img" src="https://i.ibb.co/2YYHMf8V" alt="Omelette">
+                <div class="desc-box">
+                    A fluffy, spiced egg omelette packed with fresh onion, tomato, and green chili. Simple, quick, and packed with flavor.
+                    <div class="time-box">
+                        Time: 10-15 Mins
+                        <span>Serves: 1</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section-header">Ingredients:</div>
+            <ul class="ingredients-grid">
+                <li>2 Eggs</li>
+                <li>1/2 Onion</li>
+                <li>1 Tomato</li>
+                <li>1 Green Chili</li>
+                <li>Salt & Pepper</li>
+                <li>Red Chili Powder</li>
+                <li>Butter or Oil</li>
+            </ul>
+            <div class="section-header">Instructions:</div>
+            <div class="instructions-box">
+                <strong>Prep the Mixture:</strong>
+                <ul><li>Crack eggs and whisk. Finely chop onion, tomato, and green chili. Add spices.</li>
+                <li class="disclaimer">⚠️ Haalka haath rakhna (Don't add too much spice!)</li></ul>
+                <strong>Cook the Omelette:</strong>
+                <ul><li>Heat butter/oil in a pan over medium-high heat. Pour in egg mixture.</li>
+                <li>When edges set, simply fold in half and serve!</li></ul>
+            </div>
+        </div>
+
+        <!-- ====== PAGE 3: ALOO WALA PARATHA ====== -->
+        <div class="page">
+            <div class="category">Breakfast</div>
+            <div class="recipe-title">Aloo Wala Paratha</div>
+            <div class="top-layout">
+                <img class="food-img" src="https://i.ibb.co/TB8QrPvg" alt="Paratha">
+                <div class="desc-box">
+                    A classic Punjabi stuffed flatbread. Crispy on the outside, soft and spicy potato filling on the inside.
+                    <div class="time-box">
+                        Time: 20-30 Mins
+                        <span>Serves: 1</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section-header">Ingredients:</div>
+            <ul class="ingredients-grid">
+                <li>2 Potatoes</li>
+                <li>1 Onion</li>
+                <li>1 Green Chili</li>
+                <li>Garlic (optional)</li>
+                <li>Salt, Pepper</li>
+                <li>Red Chili, Haldi, Cumin</li>
+                <li>Dough & Ghee/Oil</li>
+            </ul>
+            <div class="section-header">Instructions:</div>
+            <div class="instructions-box">
+                <strong>Prepare the Filling:</strong>
+                <ul><li>Boil potatoes until tender. Mash them well.</li>
+                <li>Mix in chopped onion, chili, garlic, and all spices.</li></ul>
+                <strong>Cook the Paratha:</strong>
+                <ul><li>Stuff the dough, fold into a half-moon shape, and seal.</li>
+                <li>Pan-fry with ghee/oil on both sides until golden brown.</li></ul>
+            </div>
+        </div>
+
+        <!-- ====== PAGE 4: EGG & CHEESE QUESADILLA ====== -->
+        <div class="page">
+            <div class="category">Breakfast</div>
+            <div class="recipe-title">Egg & Cheese Quesadilla</div>
+            <div class="top-layout">
+                <img class="food-img" src="https://i.ibb.co/YgLTq0y" alt="Quesadilla">
+                <div class="desc-box">
+                    A crispy, golden tortilla stuffed with fluffy scrambled eggs and gooey melted cheese. A 10-minute breakfast winner!
+                    <div class="time-box">
+                        Time: 10 Mins
+                        <span>Serves: 1</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section-header">Ingredients:</div>
+            <ul class="ingredients-grid">
+                <li>1 Tortilla</li>
+                <li>2 Eggs</li>
+                <li>1/4 cup Shredded Cheese</li>
+                <li>Chili flakes / Hot sauce</li>
+                <li>Butter or Oil</li>
+            </ul>
+            <div class="section-header">Instructions:</div>
+            <div class="instructions-box">
+                <strong>Assemble:</strong>
+                <ul><li>Scramble eggs in a pan.</li>
+                <li>Place tortilla in an oiled pan. Add cheese, eggs, and chili flakes to one half.</li>
+                <li>Fold over. Cook both sides until golden and cheese is melted.</li></ul>
+            </div>
+        </div>
+
+        <!-- ====== PAGE 5: GYRO BOWL ====== -->
+        <div class="page">
+            <div class="category">Lunch</div>
+            <div class="recipe-title">Mediterranean Chicken Gyro Bowl</div>
+            <div class="top-layout">
+                <img class="food-img" src="https://i.ibb.co/nsn7XL2K" alt="Gyro Bowl">
+                <div class="desc-box">
+                    Juicy seared chicken over fluffy rice, loaded with fresh cucumber, tomatoes, olives, and feta. A healthy bowl of flavor.
+                    <div class="time-box">
+                        Time: 30 Mins (Prep 15 / Cook 15)
+                        <span>Serves: 2</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section-header">Ingredients:</div>
+            <ul class="ingredients-grid">
+                <li>2 Chicken breasts (cubed)</li>
+                <li>Olive oil, Lemon juice</li>
+                <li>Garlic, Oregano</li>
+                <li>Cooked Rice</li>
+                <li>Cucumber, Tomatoes</li>
+                <li>Olives, Feta cheese</li>
+                <li>Tzatziki sauce</li>
+            </ul>
+            <div class="section-header">Instructions:</div>
+            <div class="instructions-box">
+                <strong>Cook the Chicken:</strong>
+                <ul><li>Marinate chicken with oil, lemon, garlic, oregano, salt, and pepper.</li>
+                <li>Sear in a hot skillet for 6-8 minutes until fully cooked.</li></ul>
+                <strong>Assemble the Bowl:</strong>
+                <ul><li>Divide rice into bowls. Top with chicken, veggies, and feta.</li>
+                <li>Finish with a generous dollop of tzatziki sauce.</li></ul>
+            </div>
+        </div>
+
+        <!-- ====== PAGE 6: RED SAUCE PASTA ====== -->
+        <div class="page">
+            <div class="category">Lunch</div>
+            <div class="recipe-title">Classic Red Sauce Pasta</div>
+            <div class="top-layout">
+                <img class="food-img" src="https://i.ibb.co/N6D8d9py" alt="Red Pasta">
+                <div class="desc-box">
+                    A simple, rich tomato sauce made with San Marzano tomatoes, fresh garlic, and basil coating your favorite pasta.
+                    <div class="time-box">
+                        Time: 35 Mins (Prep 10 / Cook 25)
+                        <span>Serves: 2</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section-header">Ingredients:</div>
+            <ul class="ingredients-grid">
+                <li>2 cups Rigatoni</li>
+                <li>2 tbsp EVOO</li>
+                <li>4 Garlic cloves</li>
+                <li>28oz Crushed Tomatoes</li>
+                <li>Red pepper flakes</li>
+                <li>Fresh Basil</li>
+                <li>Parmesan cheese</li>
+            </ul>
+            <div class="section-header">Instructions:</div>
+            <div class="instructions-box">
+                <strong>Prepare the Pasta:</strong>
+                <ul><li>Cook pasta al dente. Reserve 1/2 cup of pasta water.</li></ul>
+                <strong>Make the Sauce:</strong>
+                <ul><li>Saute garlic and flakes in olive oil for 1 minute.</li>
+                <li>Add tomatoes, salt, and pepper. Simmer for 15-20 mins.</li>
+                <li>Stir in fresh basil. Fold pasta into the sauce.</li></ul>
+            </div>
+        </div>
+
+        <!-- ====== PAGE 7: ALFREDO ====== -->
+        <div class="page">
+            <div class="category">Lunch</div>
+            <div class="recipe-title">Creamy Fettuccine Alfredo</div>
+            <div class="top-layout">
+                <img class="food-img" src="https://i.ibb.co/1fSQhnjw" alt="Alfredo">
+                <div class="desc-box">
+                    Indulgent, creamy fettuccine tossed in a rich butter and parmesan sauce. Mushrooms are optional, but highly recommended!
+                    <div class="time-box">
+                        Time: 25 Mins (Prep 10 / Cook 15)
+                        <span>Serves: 2</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section-header">Ingredients:</div>
+            <ul class="ingredients-grid">
+                <li>Fettuccine pasta</li>
+                <li>8oz Mushrooms (opt)</li>
+                <li>1/2 cup Butter</li>
+                <li>1 cup Heavy Cream</li>
+                <li>3 Garlic cloves</li>
+                <li>1 cup Parmesan</li>
+                <li>Parsley</li>
+            </ul>
+            <div class="section-header">Instructions:</div>
+            <div class="instructions-box">
+                <strong>Prep the Mushrooms:</strong>
+                <ul><li>If using, sauté mushrooms in butter until browned; set aside.</li></ul>
+                <strong>Make the Sauce:</strong>
+                <ul><li>Melt butter with cream over medium-low heat. Add garlic for 2 mins.</li>
+                <li>Whisk in cheese until smooth. Season.</li>
+                <li>Fold cooked pasta and mushrooms into the sauce. Garnish with parsley.</li></ul>
+            </div>
+        </div>
+
+        <!-- ====== PAGE 8: STUFFED PEPPERS ====== -->
+        <div class="page">
+            <div class="category">Dinner (Stovetop Specials)</div>
+            <div class="recipe-title">Stovetop Stuffed Bell Peppers</div>
+            <div class="top-layout">
+                <img class="food-img" src="https://i.ibb.co/2pywGpv" alt="Stuffed Pepper">
+                <div class="desc-box">
+                    Tender bell peppers stuffed with a savory ground chicken and rice mixture, topped with melty cheese. No oven needed!
+                    <div class="time-box">
+                        Time: 50 Mins (Prep 20 / Cook 30)
+                        <span>Serves: 4</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section-header">Ingredients:</div>
+            <ul class="ingredients-grid">
+                <li>4 Bell Peppers</li>
+                <li>450g Ground Chicken</li>
+                <li>1 Onion, Garlic</li>
+                <li>200g Cooked Rice</li>
+                <li>Corn, Tomato Sauce</li>
+                <li>Taco Seasoning</li>
+                <li>Cheese, Broth</li>
+            </ul>
+            <div class="section-header">Instructions:</div>
+            <div class="instructions-box">
+                <strong>Prepare the Filling:</strong>
+                <ul><li>Saute onion/garlic. Cook ground chicken until browned.</li>
+                <li>Stir in rice, corn, sauce, and spices. Simmer 2 mins.</li></ul>
+                <strong>Steam the Peppers:</strong>
+                <ul><li>Stuff peppers. Place upright in a deep skillet. Add broth to the bottom.</li>
+                <li>Cover and steam on medium-low for 20-25 mins.</li>
+                <li>Top with cheese, cover for 2 mins to melt.</li></ul>
+            </div>
+        </div>
+
+        <!-- ====== PAGE 9: MOUSSAKA ====== -->
+        <div class="page">
+            <div class="category">Dinner (Stovetop Specials)</div>
+            <div class="recipe-title">Skillet-Only Moussaka</div>
+            <div class="top-layout">
+                <img class="food-img" src="https://i.ibb.co/QvPjrpVR" alt="Moussaka">
+                <div class="desc-box">
+                    A Greek-inspired casserole layered with eggplant, savory meat sauce, and a creamy ricotta topping. All made in one skillet!
+                    <div class="time-box">
+                        Time: 50 Mins (Prep 20 / Cook 30)
+                        <span>Serves: 4</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section-header">Ingredients:</div>
+            <ul class="ingredients-grid">
+                <li>1 Large Eggplant</li>
+                <li>450g Ground Chicken</li>
+                <li>1 Onion, Garlic</li>
+                <li>1 can Diced Tomatoes</li>
+                <li>Cinnamon, Allspice</li>
+                <li>250g Ricotta</li>
+                <li>1 Egg, Parmesan</li>
+            </ul>
+            <div class="section-header">Instructions:</div>
+            <div class="instructions-box">
+                <strong>Cook the Base:</strong>
+                <ul><li>Pan-fry eggplant slices until soft; set aside.</li>
+                <li>In same pan, cook meat with onion/garlic. Add tomatoes and spices; simmer.</li></ul>
+                <strong>Assemble & Steam:</strong>
+                <ul><li>Layer eggplant over the meat sauce in the skillet.</li>
+                <li>Spread ricotta/egg/Parmesan mix on top. Cover and cook on low 12-15 mins.</li></ul>
+            </div>
+        </div>
+
+        <!-- ====== PAGE 10: LEMON HERB CHICKEN ====== -->
+        <div class="page">
+            <div class="category">Dinner (Stovetop Specials)</div>
+            <div class="recipe-title">Lemon Herb Chicken & Crispy Potatoes</div>
+            <div class="top-layout">
+                <img class="food-img" src="https://i.ibb.co/NdBpsmQp" alt="Lemon Chicken">
+                <div class="desc-box">
+                    Juicy, herb-marinated chicken cutlets served with perfectly golden, crispy baby potatoes. A one-skillet flavor bomb!
+                    <div class="time-box">
+                        Time: 40 Mins (Prep 15 / Cook 25)
+                        <span>Serves: 4</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section-header">Ingredients:</div>
+            <ul class="ingredients-grid">
+                <li>700g Chicken cutlets</li>
+                <li>700g Baby Potatoes</li>
+                <li>3 tbsp Olive Oil</li>
+                <li>1 Lemon (zest & juice)</li>
+                <li>3 Garlic cloves</li>
+                <li>Rosemary, Thyme</li>
+                <li>Salt & Pepper</li>
+            </ul>
+            <div class="section-header">Instructions:</div>
+            <div class="instructions-box">
+                <strong>Cook the Potatoes:</strong>
+                <ul><li>Boil potatoes for 8-10 mins; drain well.</li>
+                <li>Pan-fry potatoes 
